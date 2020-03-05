@@ -1,0 +1,70 @@
+<html>
+  <head>
+    <title>Twill js</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script type="text/javascript" src="/twill.js">//</script>
+  </head>
+  <body>
+
+    <div id="example">
+      <div
+        t-each="field, k in fields"
+        t-class="'fielt-' + field.required"
+      >
+
+        <label
+          t-for="field.name"
+          t-text="field.label"
+        ></label>
+
+        <input
+          type="text"
+          t-name="field.name"
+          t-placeholder="field.placeholder"
+          t-disabled="field.disabled"
+        />
+
+      </div>
+
+      <div t-if="myVal">
+        myVal=true
+      </div>
+
+      <p>
+        HTML: <span t-html="myHtml"></span>
+      </p>
+      <p>
+        Text: <span t-text="myHtml"></span>
+      </p>
+      <p t-attr="data-id, data">Custom data-id attribute</p>
+    </div>
+
+    <script type="text/javascript">
+const twill = new Twill()
+const vars = {
+  fields: [
+    {
+      name: 'first_name',
+      label: 'First Name',
+      placeholder: 'Your First Name',
+      disabled: false,
+      className: 'some-class',
+      required: true
+    },
+    {
+      name: 'email',
+      label: 'E-mail',
+      placeholder: 'Your E-mail',
+      disabled: true,
+      className: '',
+      required: false
+    }
+  ],
+  myVal: true,
+  myHtml: '<b>Hello</b>',
+  data: "123"
+}
+twill.parseNode(document.getElementById('example'), vars)
+    </script>
+  </body>
+</html>

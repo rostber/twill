@@ -1,0 +1,29 @@
+{
+  "name": "twill",
+  "version": "0.0.1",
+  "description": "",
+  "main": "./dist/twill.js",
+  "scripts": {
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage --colors",
+    "dev": "webpack --mode development",
+    "build": "webpack --mode production",
+    "start": "webpack-dev-server --mode development --open"
+  },
+  "author": "rostber",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/core": "^7.8.3",
+    "@babel/preset-env": "^7.8.3",
+    "babel-jest": "^25.1.0",
+    "babel-loader": "^8.0.4",
+    "jest": "^25.1.0",
+    "webpack": "^4.41.5",
+    "webpack-cli": "^3.1.1",
+    "webpack-dev-server": "^3.10.1"
+  },
+  "devDependencies": {
+    "html-webpack-plugin": "^3.2.0"
+  }
+}
