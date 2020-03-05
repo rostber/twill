@@ -1,13 +1,80 @@
 # Twill js
 
-The Twill.js is a ultra small (2k gzip) JS templating engine.
+The [Twill.js](https://raw.githubusercontent.com/rostber/twill/master/dist/twill.js) is an ultra small (2k gzip) JS templating engine.
 Uses a part of dom to compile a dynamic html.
-The Twill.js is similar to Vue templates.
+
+That is similar to Vue templates.
 
 ## Usage
 
+Input:
 
+```html
+<div
+  t-each="field, k in fields"
+  t-class="'fielt-' + field.required"
+>
+
+  <label
+    t-for="field.name"
+    t-text="field.label"
+  ></label>
+
+  <input
+    type="text"
+    t-name="field.name"
+    t-placeholder="field.placeholder"
+    t-disabled="field.disabled"
+  />
+
+</div>
+
+<div t-if="myVal">
+  myVal=true
+</div>
+
+<p>
+  HTML: <span t-html="myHtml"></span>
+</p>
+<p>
+  Text: <span t-text="myHtml"></span>
+</p>
+<p t-attr="data-id, data">Custom data-id attribute</p>
 ```
+
+Output:
+
+```html
+<div class="fielt-true">
+
+  <label for="first_name">First Name</label>
+
+  <input type="text" placeholder="Your First Name" name="first_name">
+
+</div><div class="fielt-false">
+
+  <label for="email">E-mail</label>
+
+  <input type="text" placeholder="Your E-mail" disabled="true" name="email">
+
+</div>
+
+<div>
+  myVal=true
+</div>
+
+<p>
+  HTML: <span><b>Hello</b></span>
+</p>
+<p>
+  Text: <span>&lt;b&gt;Hello&lt;/b&gt;</span>
+</p>
+<p data-id="123">Custom data-id attribute</p>
+```
+
+Example:
+
+```javascript
 const Twill = require('../src/twill')
 const twill = new Twill()
 
@@ -78,7 +145,7 @@ console.log('html:', html)
 - prefix // The prefix of attributes
 - methods // Custom methods t-text, t-html, ...
 
-```
+```javascript
 const twill = new Twill({
   prefix: 't-',
   methods: {
@@ -98,17 +165,17 @@ const twill = new Twill({
 Basic:
 
 - t-each="item, k in items"
-- t-if="var > true"
-- b-text="var"
-- b-html="var"
-- t-class="var ? 'enabled' : 'disabled'"
+- t-if="myVar > true"
+- t-text="myVar"
+- t-html="myFunct()"
+- t-class="myVar ? 'enabled' : 'disabled'"
 
 Attributes:
 
-- t-id="'some'"
-- t-for="'some'"
-- t-value="'some'"
-- t-placeholder="'some'"
+- t-id="'some string'"
+- t-for="'some string'"
+- t-value="'some string'"
+- t-placeholder="'some string'"
 - t-disabled="true"
 - t-checked="true"
 - t-readonly="true"
@@ -117,38 +184,63 @@ Attributes:
 
 Custom attributes:
 
-- attr="data-value, jsonVariable"
+- t-attr="data-value, jsonVariable"
+
+## Expressions
+
+Js standard expressions available:
+
+```javascript
+<div t-text="true"></div>
+<div t-text="false"></div>
+<div t-text="'some string'"></div>
+<div t-text="myVar >= 123"></div>
+<div t-text="myVar.field.key"></div>
+<div t-text="myVar + ' hello'"></div>
+<div t-text="myVar ? 'show' : 'hide'"></div>
+<div t-text="myVar.trim()"></div>
+...
+
+<div t-if="true"></div>
+<div t-if="false"></div>
+....
+```
 
 ## Methods
 
 - parseHtml
 
-```
+```javascript
 const Twill = require('../src/twill')
 const twill = new Twill()
-const = `
+const template = `
 <ul>
   <li t-each="item, k in items" t-text="item"></li>
 </ul>
 `
-
 const html = twill.parseHtml(template, {items: [1, 2, 3]})
 console.log('html:', html)
+```
 
-// <ul>
-//   <li>1</li><li>2</li><li>3</li>
-// </ul>
+Output:
+
+```html
+<ul>
+  <li>1</li><li>2</li><li>3</li>
+</ul>
 ```
 
 - parseNode
 
-```
+```javascript
 const Twill = require('../src/twill')
 const twill = new Twill()
 twill.parseNode(document.getElementById('example'), {items: [1, 2, 3]})
 ```
 
-```
+Input:
+
+```html
 <div id="example">
   <ul>
     <li t-each="item, k in items" t-text="item"></li>
@@ -156,9 +248,19 @@ twill.parseNode(document.getElementById('example'), {items: [1, 2, 3]})
 </div>
 ```
 
+Output:
+
+```html
+<div id="example">
+  <ul>
+    <li>1</li><li>2</li><li>3</li>
+  </ul>
+</div>
+```
+
 ## Console
 
-Run for dev
+Webpack commands
 
 ```
 npm start
