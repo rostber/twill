@@ -10,7 +10,7 @@ class Twill {
         const res = attr.match(/([A-Za-z]\w*)/gm)
         if (res.length === 4) {
           const [kItem, kKey, d, kItems] = res
-          const items = this.variable(kItems, data)
+          const items = this.var(kItems, data)
           let elNext = el
           for (const index in items) {
             const i = parseInt(index)
@@ -28,33 +28,32 @@ class Twill {
         }
       },
       if: (el, attr, name, data) => {
-        const value = this.variable(attr, data)
-        if (!value) this.remove(el)
+        if (!this.var(attr, data)) this.remove(el)
+      },
+      unless: (el, attr, name, data) => {
+        if (this.var(attr, data)) this.remove(el)
       },
       text: (el, attr, name, data) => {
-        el.textContent = this.variable(attr, data)
+        el.textContent = this.var(attr, data)
       },
       html: (el, attr, name, data) => {
-        el.innerHTML = this.variable(attr, data)
+        el.innerHTML = this.var(attr, data)
       },
       class: (el, attr, name, data) => {
-        el.classList.add(this.variable(attr, data))
+        el.classList.add(this.var(attr, data))
       },
       attr: (el, attr, name, data) => {
         const res = attr.match(/([A-Za-z-_]*)([A-Za-z]\w*)/gm)
         if (res.length !== 2) return
         this.attr(el, res[1], res[0], data)
-      },
-      id: this.attr.bind(this),
-      for: this.attr.bind(this),
-      value: this.attr.bind(this),
-      placeholder: this.attr.bind(this),
-      disabled: this.attr.bind(this),
-      checked: this.attr.bind(this),
-      readonly: this.attr.bind(this),
-      href: this.attr.bind(this),
-      name: this.attr.bind(this)
+      }
     }
+    'id for value placeholder disabled checked readonly href name'
+      .split(' ')
+      .reduce((r, k) => {
+        r[k] = this.attr.bind(this)
+        return r
+      }, this.methods)
     this.methods = Object.assign({}, this.methods, this.options.methods)
   }
   parseHtml (template, data) {
@@ -67,7 +66,7 @@ class Twill {
     wrap.childNodes.forEach((cEl) => this.nested(cEl, data))
   }
   attr (el, attr, name, data) {
-    const value = this.variable(attr, data)
+    const value = this.var(attr, data)
     if (value === false) el.removeAttribute(name, value)
     else el.setAttribute(name, value)
   }
@@ -92,7 +91,7 @@ class Twill {
   remove (el) {
     el.parentNode.removeChild(el)
   }
-  variable (name, data) {
+  var (name, data) {
     try {
       return new Function('v', `with (v) { return (${name})}`)(data)
     } catch(e) {

@@ -17,7 +17,7 @@ Input:
 
   <label
     t-for="field.name"
-    t-text="field.label"
+    t-text="k + '. ' + field.label"
   ></label>
 
   <input
@@ -29,8 +29,20 @@ Input:
 
 </div>
 
-<div t-if="myVal">
-  myVal=true
+<div t-if="trueVal">
+  if true
+</div>
+
+<div t-if="falseVal">
+  if false
+</div>
+
+<div t-unless="falseVal">
+  unless false
+</div>
+
+<div t-unless="trueVal">
+  unless true
 </div>
 
 <p>
@@ -39,6 +51,7 @@ Input:
 <p>
   Text: <span t-text="myHtml"></span>
 </p>
+
 <p t-attr="data-id, data">Custom data-id attribute</p>
 ```
 
@@ -47,20 +60,24 @@ Output:
 ```html
 <div class="fielt-true">
 
-  <label for="first_name">First Name</label>
+  <label for="first_name">1. First Name</label>
 
   <input type="text" placeholder="Your First Name" name="first_name">
 
 </div><div class="fielt-false">
 
-  <label for="email">E-mail</label>
+  <label for="email">2. E-mail</label>
 
   <input type="text" placeholder="Your E-mail" disabled="true" name="email">
 
 </div>
 
 <div>
-  myVal=true
+  if true
+</div>
+
+<div>
+  unless false
 </div>
 
 <p>
@@ -69,6 +86,7 @@ Output:
 <p>
   Text: <span>&lt;b&gt;Hello&lt;/b&gt;</span>
 </p>
+
 <p data-id="123">Custom data-id attribute</p>
 ```
 
@@ -130,7 +148,8 @@ const vars = {
       required: false
     }
   ],
-  myVal: true,
+  trueVal: true,
+  falseVal: false,
   myHtml: '<b>Hello</b>',
   data: "123"
 }
