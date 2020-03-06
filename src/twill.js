@@ -7,8 +7,7 @@ class Twill {
     this.options = Object.assign({}, defaultOptions, options)
     this.methods = {
       each: (el, attr, name, data) => {
-        const re = new RegExp('([A-Za-z]\\w*)', 'gm')
-        const res = attr.match(re)
+        const res = attr.match(/([A-Za-z]\w*)/gm)
         if (res.length === 4) {
           const [kItem, kKey, d, kItems] = res
           const items = this.variable(kItems, data)
@@ -39,7 +38,7 @@ class Twill {
         el.innerHTML = this.variable(attr, data)
       },
       class: (el, attr, name, data) => {
-        el.className += this.variable(attr, data)
+        el.classList.add(this.variable(attr, data))
       },
       attr: (el, attr, name, data) => {
         const res = attr.match(/([A-Za-z-_]*)([A-Za-z]\w*)/gm)

@@ -1,9 +1,20 @@
+const WebpackAutoInject = require('webpack-auto-inject-version')
+
 module.exports = {
   entry: './src/twill.js',
   output: {
-    filename: 'twill.js'
+    filename: 'twill.js',
   },
   devtool: 'source-map',
+  plugins: [
+    new WebpackAutoInject({
+      SHORT: 'Twill.js (c) Rostber',
+      components: {
+        AutoIncreaseVersion: false,
+        InjectAsComment: true
+      }
+    })
+  ],
   module: {
     rules: [
     {
