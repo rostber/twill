@@ -7,25 +7,29 @@ class Twill {
     this.options = Object.assign({}, defaultOptions, options)
     this.methods = {
       each: (el, attr, name, data) => {
-        const res = attr.match(/([A-Za-z]\w*)/gm)
-        if (res.length === 4) {
-          const [kItem, kKey, d, kItems] = res
-          const items = this.var(kItems, data)
-          let elNext = el
-          for (const index in items) {
-            const i = parseInt(index)
-            const item = items[i]
-            const localData = Object.assign({}, data)
-            localData[kKey] = i
-            localData[kItem] = item
-            const cloneEl = el.cloneNode(true)
-            while (elNext.nodeName !== '#text') elNext = elNext.nextSibling
-            el.parentNode.insertBefore(cloneEl, elNext)
-            this.nested(cloneEl, localData)
-          }
-          this.remove(el)
-          return true
+        const res = attr.split(/ in /gm)
+        if (res.length !== 2) return
+
+        const resF = res[0].split(/[ ]*,[ ]*/gm)
+        if (resF.length !== 2) return
+        const [kItem, kKey] = resF
+
+        const kItems = res[1]
+        const items = this.var(kItems, data)
+        let elNext = el
+        for (const index in items) {
+          const i = parseInt(index)
+          const item = items[i]
+          const localData = Object.assign({}, data)
+          localData[kKey] = i
+          localData[kItem] = item
+          const cloneEl = el.cloneNode(true)
+          while (elNext.nodeName !== '#text') elNext = elNext.nextSibling
+          el.parentNode.insertBefore(cloneEl, elNext)
+          this.nested(cloneEl, localData)
         }
+        this.remove(el)
+        return true
       },
       if: (el, attr, name, data) => {
         if (!this.var(attr, data)) this.remove(el)
@@ -71,22 +75,20 @@ class Twill {
     else el.setAttribute(name, value)
   }
   nested (el, data) {
-    let forMethod = false
-    if (el.nodeName !== '#text') {
-      const localData = Object.assign({}, data)
-      const methods = this.methods
-      for (const key in methods) {
-        const method = methods[key]
-        const attrName = `${this.options.prefix}${key}`
-        if (el.hasAttribute(attrName)) {
-          const attr = el.getAttribute(attrName)
-          el.removeAttribute(attrName)
-          forMethod = method(el, attr, key, localData)
-          if (forMethod) break
-        }
+    if (el.nodeName === '#text') return
+
+    const methods = this.methods
+    for (const key in methods) {
+      const method = methods[key]
+      const attrName = this.options.prefix + key
+      if (el.hasAttribute(attrName)) {
+        const attr = el.getAttribute(attrName)
+        el.removeAttribute(attrName)
+        if (method(el, attr, key, data)) return
       }
     }
-    if (!forMethod) Object.values(el.childNodes).map((cEl) => this.nested(cEl, data))
+
+    Object.values(el.childNodes).map((cEl) => this.nested(cEl, data))
   }
   remove (el) {
     el.parentNode.removeChild(el)

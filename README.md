@@ -23,6 +23,7 @@ Input:
   <input
     type="text"
     t-name="field.name"
+    t-id="field.name"
     t-placeholder="field.placeholder"
     t-disabled="field.disabled"
   />
@@ -62,13 +63,13 @@ Output:
 
   <label for="first_name">1. First Name</label>
 
-  <input type="text" placeholder="Your First Name" name="first_name">
+  <input type="text" placeholder="Your First Name" name="first_name" id="first_name">
 
 </div><div class="fielt-false">
 
   <label for="email">2. E-mail</label>
 
-  <input type="text" placeholder="Your E-mail" disabled="true" name="email">
+  <input type="text" placeholder="Your E-mail" disabled="true" name="email" id="email">
 
 </div>
 
