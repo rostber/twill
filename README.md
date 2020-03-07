@@ -1,4 +1,4 @@
-# Twill js
+# Twill
 
 The [Twill.js](https://raw.githubusercontent.com/rostber/twill/master/dist/twill.js) is an ultra small (2k gzip) JS templating engine.
 Uses a part of dom to compile a dynamic html.

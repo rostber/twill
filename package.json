@@ -1,5 +1,5 @@
 {
-  "name": "twill",
+  "name": "twill-engine",
   "version": "0.1.0",
   "description": "",
   "main": "./dist/twill.js",
