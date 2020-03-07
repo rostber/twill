@@ -2,10 +2,10 @@ class Twill {
   constructor (options) {
     const defaultOptions = {
       prefix: 't-',
-      methods: {}
+      directives: {}
     }
     this.options = Object.assign({}, defaultOptions, options)
-    this.methods = {
+    this.directives = {
       each: (el, attr, name, data) => {
         const res = attr.split(/ in /gm)
         if (res.length !== 2) return
@@ -16,7 +16,6 @@ class Twill {
 
         const kItems = res[1]
         const items = this.var(kItems, data)
-        let elNext = el
         for (const index in items) {
           const i = parseInt(index)
           const item = items[i]
@@ -24,18 +23,38 @@ class Twill {
           localData[kKey] = i
           localData[kItem] = item
           const cloneEl = el.cloneNode(true)
-          while (elNext.nodeName !== '#text') elNext = elNext.nextSibling
-          el.parentNode.insertBefore(cloneEl, elNext)
+          el.parentNode.insertBefore(cloneEl, el)
           this.nested(cloneEl, localData)
         }
         this.remove(el)
         return true
       },
       if: (el, attr, name, data) => {
-        if (!this.var(attr, data)) this.remove(el)
-      },
-      unless: (el, attr, name, data) => {
-        if (this.var(attr, data)) this.remove(el)
+        const remove = (el, attr, name, data) => {
+          const nextEl = this.next(el)
+          if (nextEl) {
+            this.touch(nextEl, 'else', data, remove)
+            this.touch(nextEl, 'else-if', data, remove)
+          }
+          this.remove(el)
+        }
+        const elseIf = (el, attr, name, data) => {
+          const nextEl = this.next(el)
+          const result = this.var(attr, data)
+          if (!result) {
+            if (nextEl) {
+              this.touch(nextEl, 'else', data)
+              this.touch(nextEl, 'else-if', data, elseIf)
+            }
+            this.remove(el)
+          } else {
+            if (nextEl) {
+              this.touch(nextEl, 'else', data, remove)
+              this.touch(nextEl, 'else-if', data, remove)
+            }
+          }
+        }
+        elseIf(el, attr, name, data)
       },
       text: (el, attr, name, data) => {
         el.textContent = this.var(attr, data)
@@ -57,8 +76,8 @@ class Twill {
       .reduce((r, k) => {
         r[k] = this.attr.bind(this)
         return r
-      }, this.methods)
-    this.methods = Object.assign({}, this.methods, this.options.methods)
+      }, this.directives)
+    this.directives = Object.assign({}, this.directives, this.options.directives)
   }
   parseHtml (template, data) {
     const wrap = document.createElement('div')
@@ -75,23 +94,31 @@ class Twill {
     else el.setAttribute(name, value)
   }
   nested (el, data) {
-    if (el.nodeName === '#text') return
+    if (el.nodeType !== 1) return
 
-    const methods = this.methods
-    for (const key in methods) {
-      const method = methods[key]
-      const attrName = this.options.prefix + key
-      if (el.hasAttribute(attrName)) {
-        const attr = el.getAttribute(attrName)
-        el.removeAttribute(attrName)
-        if (method(el, attr, key, data)) return
-      }
+    const directives = this.directives
+    for (const key in directives) {
+      if (this.touch(el, key, data, directives[key])) return
     }
 
     Object.values(el.childNodes).map((cEl) => this.nested(cEl, data))
   }
   remove (el) {
     el.parentNode.removeChild(el)
+  }
+  touch (el, key, data, callback) {
+    if (el.nodeType === 8) return
+    const attrName = this.options.prefix + key
+    if (el.hasAttribute(attrName)) {
+      const attr = el.getAttribute(attrName)
+      el.removeAttribute(attrName)
+      if (callback) return callback.bind(this)(el, attr, key, data)
+    }
+  }
+  next (el) {
+    el = el.nextSibling
+    while (el && el.nodeType !== 1) el = el.nextSibling
+    return el
   }
   var (name, data) {
     try {

@@ -30,20 +30,17 @@ Input:
 
 </div>
 
-<div t-if="trueVal">
-  if true
-</div>
-
-<div t-if="falseVal">
+<div t-if="false">
   if false
 </div>
-
-<div t-unless="falseVal">
-  unless false
+<div t-if-else="false">
+  if else false
 </div>
-
-<div t-unless="trueVal">
-  unless true
+<div t-if-else="true">
+  if else true
+</div>
+<div else>
+  else
 </div>
 
 <p>
@@ -74,11 +71,7 @@ Output:
 </div>
 
 <div>
-  if true
-</div>
-
-<div>
-  unless false
+  if else true
 </div>
 
 <p>
@@ -117,8 +110,17 @@ const template = `
 
 </div>
 
-<div t-if="myVal">
-  myVal=true
+<div t-if="false">
+  if false
+</div>
+<div t-if-else="false">
+  if else false
+</div>
+<div t-if-else="true">
+  if else true
+</div>
+<div else>
+  else
 </div>
 
 <p>
@@ -149,8 +151,6 @@ const vars = {
       required: false
     }
   ],
-  trueVal: true,
-  falseVal: false,
   myHtml: '<b>Hello</b>',
   data: "123"
 }
@@ -163,29 +163,26 @@ console.log('html:', html)
 ## Options
 
 - prefix // The prefix of attributes
-- methods // Custom methods t-text, t-html, ...
+- directives // Custom default extension directives
 
 ```javascript
 const twill = new Twill({
   prefix: 't-',
-  methods: {
-    text: (el, attr, name, data) => {
-      el.innerText = this.variable(attr, data)
-    },
-    html: (el, attr, name, data) => {
-      el.innerHTML = this.variable(attr, data)
+  directives: {
+    json: (el, attr, name, data) => {
+      el.innerText = JSON.stringify(this.variable(attr, data))
     },
     ....
   }
 })
 ```
 
-## Template methods
+## Directives
 
 Basic:
 
 - t-each="item, k in items"
-- t-if="myVar > true"
+- t-if="myVar > true" / t-else-if="false" / t-else
 - t-text="myVar"
 - t-html="myFunct()"
 - t-class="myVar ? 'enabled' : 'disabled'"
@@ -210,7 +207,7 @@ Custom attributes:
 
 Js standard expressions available:
 
-```javascript
+```html
 <div t-text="true"></div>
 <div t-text="false"></div>
 <div t-text="'some string'"></div>
@@ -228,7 +225,7 @@ Js standard expressions available:
 
 ## Methods
 
-- parseHtml
+### parseHtml
 
 ```javascript
 const Twill = require('../src/twill')
@@ -250,7 +247,7 @@ Output:
 </ul>
 ```
 
-- parseNode
+### parseNode
 
 ```javascript
 const Twill = require('../src/twill')

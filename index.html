@@ -2,44 +2,47 @@
   <head>
     <title>Twill js</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type="text/javascript" src="/twill.js">//</script>
+    <script type="text/javascript" src="dist/twill.js">//</script>
   </head>
   <body>
 
     <div id="example">
-      <div
-        t-each="field, k in fields"
-        t-class="'fielt-' + field.required"
-      >
+      <fieldset>
+        <div
+          t-each="field, k in fields"
+          t-class="'fielt-' + field.required"
+        >
 
-        <label
-          t-for="field.name"
-          t-text="k + '. ' + field.label"
-        ></label>
+          <hr t-if="k > 0" />
 
-        <input
-          type="text"
-          t-name="field.name"
-          t-placeholder="field.placeholder"
-          t-disabled="field.disabled"
-        />
+          <label
+            t-for="field.name"
+            t-text="field.label"
+          ></label>
 
-      </div>
+          <div>
+            <input
+              type="text"
+              t-name="field.name"
+              t-placeholder="field.placeholder"
+              t-disabled="field.disabled"
+            />
+          </div>
 
-      <div t-if="trueVal">
-        if true
-      </div>
+        </div>
+      </fieldset>
 
-      <div t-if="falseVal">
+      <div t-if="false">
         if false
       </div>
-
-      <div t-unless="falseVal">
-        unless false
+      <div t-if-else="false">
+        if else false
       </div>
-
-      <div t-unless="trueVal">
-        unless true
+      <div t-if-else="true">
+        if else true
+      </div>
+      <div else>
+        else
       </div>
 
       <p>
@@ -54,6 +57,7 @@
 
     <script type="text/javascript">
 const twill = new Twill()
+const el = document.getElementById('example')
 const vars = {
   fields: [
     {
@@ -71,14 +75,20 @@ const vars = {
       disabled: true,
       className: '',
       required: false
+    },
+    {
+      name: 'phone',
+      label: 'Phone',
+      placeholder: 'Your phone',
+      disabled: true,
+      className: '',
+      required: false
     }
   ],
-  trueVal: true,
-  falseVal: false,
   myHtml: '<b>Hello</b>',
   data: "123"
 }
-twill.parseNode(document.getElementById('example'), vars)
+twill.parseNode(el, vars)
     </script>
   </body>
 </html>
