@@ -8,10 +8,16 @@ module.exports = {
   devtool: 'source-map',
   plugins: [
     new WebpackAutoInject({
-      SHORT: 'Twill.js (c) Rostber',
+      SHORT: 'Twill.js',
       components: {
         AutoIncreaseVersion: false,
         InjectAsComment: true
+      },
+      componentsOptions: {
+        InjectAsComment: {
+          tag: 'Version: {version} {date} (c) Rostber https://github.com/rostber/twill/License.md',
+          dateFormat: 'h:MM:ss TT'
+        }
       }
     })
   ],

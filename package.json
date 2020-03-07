@@ -11,8 +11,21 @@
     "build": "webpack --mode production",
     "start": "webpack-dev-server --mode development --open"
   },
-  "author": "rostber",
-  "license": "ISC",
+  "author": "Vladimir Savelyev (rostber) <rostber@yandex.ru>",
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://github.com/rostber/twill/LICENSE.md"
+    }
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rostber/twill.git",
+    "web": "https://github.com/rostber/twill"
+  },
+  "bugs": {
+    "url": "https://github.com/rostber/twill/issues"
+  },
   "dependencies": {
     "@babel/core": "^7.8.3",
     "@babel/preset-env": "^7.8.3",
