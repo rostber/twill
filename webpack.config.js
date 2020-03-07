@@ -5,7 +5,6 @@ module.exports = {
   output: {
     filename: 'twill.js',
   },
-  devtool: 'source-map',
   plugins: [
     new WebpackAutoInject({
       SHORT: 'Twill.js',
