@@ -1,4 +1,4 @@
-class Twill {
+export default class Twill {
   constructor (options) {
     const defaultOptions = {
       prefix: 't-',
@@ -71,7 +71,7 @@ class Twill {
         this.attr(el, res[1], res[0], data)
       }
     }
-    'id for value placeholder disabled checked readonly href name'
+    'id for value placeholder disabled checked readonly href name style'
       .split(' ')
       .reduce((r, k) => {
         r[k] = this.attr.bind(this)
@@ -129,6 +129,3 @@ class Twill {
   }
 
 }
-
-window.Twill = Twill
-module.exports = Twill

@@ -1,4 +1,4 @@
-const Twill = require('../../src/twill')
+import Twill from '../../src/twill'
 const twill = new Twill()
 
 describe('The template with t-if', () => {

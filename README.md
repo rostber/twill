@@ -5,7 +5,7 @@ Uses a part of dom to compile a dynamic html.
 
 That is similar to Vue templates.
 
-## Usage
+## Syntax
 
 Input:
 
@@ -84,10 +84,21 @@ Output:
 <p data-id="123">Custom data-id attribute</p>
 ```
 
+
+## Usage
+
+Install:
+
+```
+npm install twill-engine
+```
+
 Example:
 
 ```javascript
-const Twill = require('../src/twill')
+import Twill from 'twill-engine'
+// const Twill = require('twill-engine').default
+
 const twill = new Twill()
 
 const template = `
@@ -198,6 +209,7 @@ Attributes:
 - t-readonly="true"
 - t-href="url"
 - t-name="field"
+- t-style="`width: ${w}px;`"
 
 Custom attributes:
 
@@ -228,7 +240,8 @@ Js standard expressions available:
 ### parseHtml
 
 ```javascript
-const Twill = require('../src/twill')
+import Twill from 'twill-engine'
+
 const twill = new Twill()
 const template = `
 <ul>
@@ -250,7 +263,8 @@ Output:
 ### parseNode
 
 ```javascript
-const Twill = require('../src/twill')
+import Twill from 'twill-engine'
+
 const twill = new Twill()
 twill.parseNode(document.getElementById('example'), {items: [1, 2, 3]})
 ```
