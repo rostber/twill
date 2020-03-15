@@ -2,93 +2,81 @@
   <head>
     <title>Twill js</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <script type="text/javascript" src="dist/twill.js">//</script>
+    <script type="text/javascript" src="dist/index.js">//</script>
   </head>
   <body>
 
-    <div id="example">
-      <fieldset>
-        <div
-          t-each="field, k in fields"
-          t-class="'fielt-' + field.required"
-        >
+    <div class="row">
 
-          <hr t-if="k > 0" />
+      <textarea class="coll" id="input" placeholder="template">
+<div t-if="true">
+  <div t-if="false">
+    1
+  </div>
+  <div t-else-if="false">
+    2
+  </div>
+  <div t-else-if="true">
+    3
+  </div>
+  <div t-else>
+    4
+  </div>
+</div>
+      </textarea>
 
-          <label
-            t-for="field.name"
-            t-text="field.label"
-          ></label>
-
-          <div>
-            <input
-              type="text"
-              t-name="field.name"
-              t-placeholder="field.placeholder"
-              t-disabled="field.disabled"
-            />
-          </div>
-
-        </div>
-      </fieldset>
-
-      <div t-if="false">
-        if false
-      </div>
-      <div t-if-else="false">
-        if else false
-      </div>
-      <div t-if-else="true">
-        if else true
-      </div>
-      <div else>
-        else
+      <div class="coll">
+        <div id="error" class="error"></div>
+        <pre id="output"></pre>
       </div>
 
-      <p>
-        HTML: <span t-html="myHtml"></span>
-      </p>
-      <p>
-        Text: <span t-text="myHtml"></span>
-      </p>
-
-      <p t-attr="data-id, data">Custom data-id attribute</p>
     </div>
 
     <script type="text/javascript">
-const twill = new Twill()
-const el = document.getElementById('example')
-const vars = {
-  fields: [
-    {
-      name: 'first_name',
-      label: 'First Name',
-      placeholder: 'Your First Name',
-      disabled: false,
-      className: 'some-class',
-      required: true
-    },
-    {
-      name: 'email',
-      label: 'E-mail',
-      placeholder: 'Your E-mail',
-      disabled: true,
-      className: '',
-      required: false
-    },
-    {
-      name: 'phone',
-      label: 'Phone',
-      placeholder: 'Your phone',
-      disabled: true,
-      className: '',
-      required: false
-    }
-  ],
-  myHtml: '<b>Hello</b>',
-  data: "123"
+const input = document.getElementById('input')
+const error = document.getElementById('error')
+const output = document.getElementById('output')
+const twill = new Twill({
+  onError: (e) => {
+    error.innerHTML = e
+  }
+})
+const render = () => {
+  output.textContent = twill.parseHtml(input.value, {})
 }
-twill.parseNode(el, vars)
+render()
+input.onkeyup = () => {
+  error.innerHTML = ''
+  render()
+}
     </script>
+
+    <style type="text/css">
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+.row {
+  display: flex;
+  min-height: 100%;
+}
+.coll {
+  flex: 1;
+  border-style: none;
+  resize: none;
+  padding: 5px;
+  margin: 0;
+  box-sizing: border-box;
+  outline-style: none;
+}
+.coll:not(:first-child) {
+  border-left: 1px solid gray;
+}
+.error {
+  color: red;
+}
+    </style>
+
   </body>
 </html>

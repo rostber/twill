@@ -154,4 +154,64 @@ describe('The template with mixed', () => {
 `)
   })
 
+  it('Should render "if 1" without error', () => {
+    const template = `
+<div t-if="true">if 1</div>
+<div t-else-if="false" t-text="undefinedVar">else-if 2</div>
+<div t-else-if="true" t-text="undefinedVar">else-if 3</div>
+<div t-else t-text="undefinedVar">else 4</div>
+`
+    expect(twill.parseHtml(template, {})).toBe(`
+<div>if 1</div>
+
+
+
+`)
+  })
+
+  it('Should render "else-if 2" without error', () => {
+    const template = `
+<div t-if="false" t-text="undefinedVar">if 1</div>
+<div t-else-if="true">else-if 2</div>
+<div t-else-if="false" t-text="undefinedVar">else-if 3</div>
+<div t-else t-text="undefinedVar">else 4</div>
+`
+    expect(twill.parseHtml(template, {})).toBe(`
+
+<div>else-if 2</div>
+
+
+`)
+  })
+
+  it('Should render "else-if 3" without error', () => {
+    const template = `
+<div t-if="false" t-text="undefinedVar">if 1</div>
+<div t-else-if="false" t-text="undefinedVar">else-if 2</div>
+<div t-else-if="true">else-if 3</div>
+<div t-else t-text="undefinedVar">else 4</div>
+`
+    expect(twill.parseHtml(template, {})).toBe(`
+
+
+<div>else-if 3</div>
+
+`)
+  })
+
+  it('Should render "else 4" without error', () => {
+    const template = `
+<div t-if="false" t-text="undefinedVar">if 1</div>
+<div t-else-if="false" t-text="undefinedVar">else-if 2</div>
+<div t-else-if="false" t-text="undefinedVar">else-if 3</div>
+<div t-else>else 4</div>
+`
+    expect(twill.parseHtml(template, {})).toBe(`
+
+
+
+<div>else 4</div>
+`)
+  })
+
 })

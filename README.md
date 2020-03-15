@@ -87,9 +87,11 @@ Output:
 
 ## Usage
 
-Install:
+### With webpack
 
-```
+Add package:
+
+```bash
 npm install twill-engine
 ```
 
@@ -101,70 +103,29 @@ import Twill from 'twill-engine'
 
 const twill = new Twill()
 
-const template = `
-<div
-  t-each="field, k in fields"
-  t-class="'fielt-' + field.required"
->
+const template = `<div t-if="false">some text</div>`
+const vars = {}
 
-  <label
-    t-for="field.name"
-    t-text="field.label"
-  ></label>
+const html = twill.parseHtml(template, vars)
+console.log('html:', html)
 
-  <input
-    type="text"
-    t-name="field.name"
-    t-placeholder="field.placeholder"
-    t-disabled="field.disabled"
-  />
+```
 
-</div>
+### Without webpack
 
-<div t-if="false">
-  if false
-</div>
-<div t-if-else="false">
-  if else false
-</div>
-<div t-if-else="true">
-  if else true
-</div>
-<div else>
-  else
-</div>
+Include to html:
 
-<p>
-  HTML: <span t-html="myHtml"></span>
-</p>
-<p>
-  Text: <span t-text="myHtml"></span>
-</p>
-<p t-attr="data-id, data">Custom data-id attribute</p>
-`
+```html
+<script src="https://cdn.jsdelivr.net/gh/rostber/twill@latest/dist/index.js" type="text/javascript">//</script>
+```
 
-const vars = {
-  fields: [
-    {
-      name: 'first_name',
-      label: 'First Name',
-      placeholder: 'Your First Name',
-      disabled: false,
-      className: 'some-class',
-      required: true
-    },
-    {
-      name: 'email',
-      label: 'E-mail',
-      placeholder: 'Your E-mail',
-      disabled: true,
-      className: '',
-      required: false
-    }
-  ],
-  myHtml: '<b>Hello</b>',
-  data: "123"
-}
+Example
+
+```javascript
+const twill = new window.Twill()
+
+const template = `<div t-if="false">some text</div>`
+const vars = {}
 
 const html = twill.parseHtml(template, vars)
 console.log('html:', html)
@@ -175,6 +136,7 @@ console.log('html:', html)
 
 - prefix // The prefix of attributes
 - directives // Custom default extension directives
+- onError // The error callback
 
 ```javascript
 const twill = new Twill({
@@ -184,6 +146,9 @@ const twill = new Twill({
       el.innerText = JSON.stringify(this.variable(attr, data))
     },
     ....
+  },
+  onError: (e) => {
+    console.log(e)
   }
 })
 ```

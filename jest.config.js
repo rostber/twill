@@ -15,13 +15,13 @@ module.exports = {
   moduleFileExtensions: ['js', 'json', 'jsx'],
 
   // The paths to modules that run some code to configure or set up the testing environment before each test
-  setupFiles: ['<rootDir>/tests/jest.setup.js'],
+  setupFiles: ['<rootDir>/test/jest.setup.js'],
 
   // The test environment that will be used for testing
   testEnvironment: 'jsdom',
 
   // The glob patterns Jest uses to detect test files
-  testMatch: ['**/tests/unit/*.unit.js?(x)', '**/?(*.)+(spec|test).js?(x)'],
+  testMatch: ['**/test/unit/*.unit.js?(x)', '**/?(*.)+(spec|test).js?(x)'],
 
   // An array of regexp pattern strings that are matched against all test paths, matched tests are skipped
   testPathIgnorePatterns: ['\\\\node_modules\\\\'],

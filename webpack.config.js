@@ -1,9 +1,12 @@
 const WebpackAutoInject = require('webpack-auto-inject-version')
 
 module.exports = {
-  entry: './src/twill.js',
+  entry: {
+    twill: __dirname + '/src/twill.js',
+    index: __dirname + '/index.js'
+  },
   output: {
-    filename: 'twill.js',
+    filename: '[name].js',
   },
   plugins: [
     new WebpackAutoInject({
