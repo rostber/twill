@@ -119,7 +119,7 @@ Include to html:
 <script src="https://cdn.jsdelivr.net/gh/rostber/twill@latest/dist/index.js" type="text/javascript">//</script>
 ```
 
-Example
+Example:
 
 ```javascript
 const twill = new window.Twill()
@@ -174,7 +174,7 @@ Attributes:
 - t-readonly="true"
 - t-href="url"
 - t-name="field"
-- t-style="`width: ${w}px;`"
+- t-style="'width: ' + w + 'px;'"
 
 Custom attributes:
 
